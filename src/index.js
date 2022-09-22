@@ -1,5 +1,6 @@
 import './css/styles.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
+import API from './fetchcountries.js';
 var debounce = require('lodash.debounce');
 
 const DEBOUNCE_DELAY = 300;
@@ -14,17 +15,10 @@ function fetchCountries(e) {
   var name = e.target.value;
   name = name.trim();
   if (name.length !== 0) {
-    fetch(`https://restcountries.com/v3.1/name/${name}`)
-      .then(response => {
-        if (response.status !== 404) {
-          return response.json();
-        } else {
-          Notify.failure('Oops, there is no country with that name');
-          throw new Error(response.status);
-        }
-      })
+    API.ffol(name)
       .then(renderCountryCard)
       .catch(error => {
+        Notify.failure('Oops, there is no country with that name');
         console.log(error);
       });
   }
